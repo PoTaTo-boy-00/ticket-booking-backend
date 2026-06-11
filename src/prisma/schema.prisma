@@ -1,0 +1,142 @@
+
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum SeatStatus {
+  AVAILABLE
+  HELD
+  BOOKED
+}
+
+enum ReservationStatus {
+  ACTIVE
+  EXPIRED
+  CONFIRMED
+  CANCELLED
+}
+
+enum BookingStatus {
+  CONFIRMED
+  CANCELLED
+}
+
+model User {
+  id    String @id @default(uuid())
+  name  String
+  email String @unique
+
+  reservations Reservation[]
+  bookings     Booking[]
+
+  heldSeats Seat[] @relation("SeatHolder")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Event {
+  id          String   @id @default(uuid())
+  title       String
+  venue       String
+  startTime   DateTime
+
+  seats       Seat[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("events")
+}
+
+model Seat {
+  id          String @id @default(uuid())
+
+  eventId     String
+  event       Event @relation(fields: [eventId], references: [id])
+
+  section     String
+  rowLabel    String
+  seatNumber  Int
+
+  status      SeatStatus @default(AVAILABLE)
+
+  heldById    String?
+  heldBy      User? @relation("SeatHolder",fields: [heldById], references: [id])
+
+  heldUntil   DateTime?
+
+  version     Int @default(0)
+
+  reservationSeats ReservationSeat[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([eventId, section, rowLabel, seatNumber])
+
+  @@index([eventId])
+  @@index([status])
+  @@index([heldUntil])
+
+  @@map("seats")
+}
+
+model Reservation {
+  id          String @id @default(uuid())
+
+  userId      String
+  user        User @relation(fields: [userId], references: [id])
+
+  status      ReservationStatus @default(ACTIVE)
+
+  expiresAt   DateTime
+
+  seats       ReservationSeat[]
+
+  booking     Booking?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([expiresAt])
+
+  @@map("reservations")
+}
+
+model ReservationSeat {
+  reservationId String
+  seatId        String
+
+  reservation Reservation @relation(fields: [reservationId],references: [id] )
+
+  seat Seat @relation(fields: [seatId],    references: [id]  )
+
+  @@id([reservationId, seatId])
+
+  @@map("reservation_seats")
+}
+
+model Booking {
+  id String @id @default(uuid())
+
+  reservationId String @unique
+  reservation Reservation @relation(fields: [reservationId], references: [id])
+
+  userId String
+  user User @relation(fields: [userId], references: [id]  )
+
+  status BookingStatus @default(CONFIRMED)
+
+  bookedAt DateTime @default(now())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("bookings")
+}
