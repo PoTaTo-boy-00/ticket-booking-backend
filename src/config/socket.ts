@@ -4,7 +4,9 @@ let io:Server;
 const initSocket = (server: any) => {
   io = new Server(server, {
     cors: {
-      origin: "*",
+      origin: [
+        process.env.CLIENT_URL || "http://localhost:3000"
+      ],
     },
   });
 

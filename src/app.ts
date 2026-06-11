@@ -6,10 +6,18 @@ import reservationRouter from "./modules/reservation/reservation.routes";
 import { errorHandler } from "./middleware/error.middleware";
 import { swaggerSpec } from "./config/swagger";
 import swaggerUi from "swagger-ui-express";
+import dotenv from "dotenv";
 
+dotenv.config();
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      process.env.CLIENT_URL || "http://localhost:3000"
+    ],
+  })
+);
 app.use(helmet());
 app.use(express.json());
 

@@ -2,7 +2,28 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const seat_controller_1 = require("./seat.controller");
+const validate_middleware_1 = require("../../middleware/validate.middleware");
+const events_validation_1 = require("../../validations/events.validation");
 const seatRouter = (0, express_1.Router)();
-seatRouter.get("/events/:eventId/seats", seat_controller_1.getSeatController);
+/**
+ * @swagger
+ * /events/{eventId}/seats:
+ *   get:
+ *     summary: Get seats for event
+ *     tags:
+ *       - Seats
+ *     parameters:
+ *       - in: path
+ *         name: eventId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Seats fetched
+ *
+ *
+ */
+seatRouter.get("/events/:eventId/seats", (0, validate_middleware_1.validateParams)(events_validation_1.eventParamsSchema), seat_controller_1.getSeatController);
 exports.default = seatRouter;
 //# sourceMappingURL=seat.routes.js.map
