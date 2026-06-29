@@ -8,11 +8,21 @@ const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
 const seat_routes_1 = __importDefault(require("./modules/seats/seat.routes"));
 const reservation_routes_1 = __importDefault(require("./modules/reservation/reservation.routes"));
+const auth_routes_1 = __importDefault(require("./modules/auth/auth.routes"));
 const error_middleware_1 = require("./middleware/error.middleware");
 const swagger_1 = require("./config/swagger");
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
+const dotenv_1 = __importDefault(require("dotenv"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
+dotenv_1.default.config();
 const app = (0, express_1.default)();
-app.use((0, cors_1.default)());
+app.use((0, cookie_parser_1.default)());
+app.use((0, cors_1.default)({
+    origin: [
+        process.env.CLIENT_URL || "http://localhost:3000",
+    ],
+    credentials: true,
+}));
 app.use((0, helmet_1.default)());
 app.use(express_1.default.json());
 app.use("/docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.swaggerSpec));
@@ -42,6 +52,7 @@ app.get("/api/health", (_, res) => {
 });
 app.use("/api", seat_routes_1.default);
 app.use("/api", reservation_routes_1.default);
+app.use("/api/auth", auth_routes_1.default);
 app.use(error_middleware_1.errorHandler);
 exports.default = app;
 //# sourceMappingURL=app.js.map

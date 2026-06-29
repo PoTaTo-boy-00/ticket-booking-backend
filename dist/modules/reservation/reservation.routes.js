@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const reservation_controller_1 = require("./reservation.controller");
 const validate_middleware_1 = require("../../middleware/validate.middleware");
-const reservation_validation_1 = require("../../validations/reservation.validation");
+const booking_validation_1 = require("../../validation/booking.validation");
 const reservationRouter = (0, express_1.Router)();
 /**
  * @swagger
@@ -40,7 +40,7 @@ const reservationRouter = (0, express_1.Router)();
  *       201:
  *         description: Reservation created
  */
-reservationRouter.post("/reservations", (0, validate_middleware_1.validateBody)(reservation_validation_1.reserveSeatSchema), reservation_controller_1.reserveSeatsController);
+reservationRouter.post("/reservations", (0, validate_middleware_1.validateBody)(booking_validation_1.reserveSeatSchema), reservation_controller_1.reserveSeatsController);
 /**
  * @swagger
  * /reservations/{reservationId}/confirm:
@@ -58,6 +58,6 @@ reservationRouter.post("/reservations", (0, validate_middleware_1.validateBody)(
  *       200:
  *         description: Reservation confirmed
  */
-reservationRouter.post("/reservations/:reservationId/confirm", (0, validate_middleware_1.validateParams)(reservation_validation_1.confirmReservationParamsSchema), (0, validate_middleware_1.validateBody)(reservation_validation_1.confirmReservationBodySchema), reservation_controller_1.confirmReservationController);
+reservationRouter.post("/reservations/:reservationId/confirm", (0, validate_middleware_1.validateParams)(booking_validation_1.confirmReservationParamsSchema), (0, validate_middleware_1.validateBody)(booking_validation_1.confirmReservationBodySchema), reservation_controller_1.confirmReservationController);
 exports.default = reservationRouter;
 //# sourceMappingURL=reservation.routes.js.map

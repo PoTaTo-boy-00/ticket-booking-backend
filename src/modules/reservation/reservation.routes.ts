@@ -1,7 +1,9 @@
 import { Router } from "express";
 import { confirmReservationController, reserveSeatsController } from "./reservation.controller";
 import { validateBody, validateParams } from "../../middleware/validate.middleware";
-import { confirmReservationBodySchema, confirmReservationParamsSchema, reserveSeatSchema } from "../../validations/reservation.validation";
+import { confirmReservationBodySchema, confirmReservationParamsSchema, reserveSeatSchema } from "../../validation/booking.validation";
+import { logger } from "../../config/logger";
+import authMiddleware from "../auth/auth.middleware";
 
 const reservationRouter = Router();
 /**
@@ -41,6 +43,7 @@ const reservationRouter = Router();
  */
 reservationRouter.post(
   "/reservations",
+  authMiddleware,
   validateBody(reserveSeatSchema),
   reserveSeatsController
 );
@@ -64,6 +67,7 @@ reservationRouter.post(
  */
 reservationRouter.post(
   "/reservations/:reservationId/confirm",
+  authMiddleware,
   validateParams(confirmReservationParamsSchema),
   validateBody(confirmReservationBodySchema),
   confirmReservationController

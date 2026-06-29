@@ -6,7 +6,9 @@ let io;
 const initSocket = (server) => {
     io = new socket_io_1.Server(server, {
         cors: {
-            origin: "*",
+            origin: [
+                process.env.CLIENT_URL || "http://localhost:3000"
+            ],
         },
     });
     console.log("Socket.IO initialized");
