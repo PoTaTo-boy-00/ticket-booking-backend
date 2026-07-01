@@ -125,7 +125,7 @@ const confirmReservation=async(eventId:string,reservationId:string):Promise<Book
 const emailNotification=async(confirmationToken:string,name:string,email:string,eventId:string)=>{
     const token = crypto.randomUUID();
     
-        const res = await fetch(`https://bg-processor.onrender.com/api/token/${token}`, {
+        const res = await fetch(`${process.env.EMAIL_NOTIFICATION_API_URL}/api/token/${token}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
