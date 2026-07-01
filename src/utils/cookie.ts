@@ -1,7 +1,7 @@
 export const accessCookieOptions:IOptionsType = {
     httpOnly: process.env.NODE_ENV === "production",
     secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",,
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     maxAge: 15 * 60 * 1000,
 };
 
