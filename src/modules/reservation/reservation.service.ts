@@ -122,8 +122,29 @@ const confirmReservation=async(eventId:string,reservationId:string):Promise<Book
     return booking;
 }
 
+const emailNotification=async(confirmationToken:string,name:string,email:string,eventId:string)=>{
+    const token = crypto.randomUUID();
+    
+        const res = await fetch(`https://bg-processor.onrender.com/api/token/${token}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          orderId: confirmationToken,
+          username: name,
+          email,
+        }),
+      });
+      if (!res.ok) {
+        throw new Error(`Request failed: ${res.status}`);
+      }
+      return res.json();
+}
+
 export {
     reserveSeats,
     expireReservation,
-    confirmReservation
+    confirmReservation,
+    emailNotification
 }

@@ -11,4 +11,6 @@ export const confirmReservationParamsSchema=z.object({
 })
 export const confirmReservationBodySchema=z.object({
     eventId:z.uuid(),
+    name:z.string().min(1),
+    email:z.string().email(),
 })
