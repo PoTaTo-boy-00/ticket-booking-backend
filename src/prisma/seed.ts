@@ -3,7 +3,7 @@ import { prisma } from "../config/prisma";
 const EVENT_ID = "dec542cd-1afa-42b1-a143-f6fd8cfb4352";
 
 async function generateSeats() {
-  const sections = ["A", "B", "C"];
+  const sections = ["A", "B", "C" ,"D", "E"];
   const seatsPerSection = 10
   const seats = [];
 
