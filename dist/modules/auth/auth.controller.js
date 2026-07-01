@@ -3,19 +3,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.refreshTokenController = exports.meController = exports.logoutController = exports.loginWithGoogleController = void 0;
 const auth_service_1 = require("./auth.service");
 const cookie_1 = require("../../utils/cookie");
+const logger_1 = require("../../config/logger");
 const loginWithGoogleController = async (req, res, next) => {
+    console.log("Controller reached");
+    console.log(req.body);
     const { idToken } = req.body;
     try {
+        logger_1.logger.debug(idToken);
         if (!idToken) {
             throw new Error("ID token is required");
         }
         const { accessToken, refreshToken, user } = await (0, auth_service_1.loginWithGoogle)(idToken);
+        logger_1.logger.warn(accessToken);
+        logger_1.logger.warn(refreshToken);
         res.cookie("access_token", accessToken, cookie_1.accessCookieOptions);
         res.cookie("refresh_token", refreshToken, cookie_1.refreshCookieOptions);
         return res.status(200).json({
             success: true,
             data: {
                 user,
+                id: user.id,
             },
         });
     }
@@ -66,13 +73,15 @@ const logoutController = async (req, res, next) => {
 };
 exports.logoutController = logoutController;
 const meController = async (req, res, next) => {
-    const userId = req.user?.userId;
+    const userId = req.user.userId;
     try {
+        logger_1.logger.debug(userId);
         const user = await (0, auth_service_1.getCurrentUser)(userId);
         return res.status(200).json({
             success: true,
             data: {
                 user,
+                userId: user.id,
             },
         });
     }

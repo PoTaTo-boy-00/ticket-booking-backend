@@ -35,21 +35,17 @@ const findOrCreateUser = async (payload) => {
     if (!payload.emailVerified) {
         throw new Error("Email is not verified");
     }
-    const user = await prisma_1.prisma.user.findUnique({
+    const user = await prisma_1.prisma.user.upsert({
         where: {
             email: payload.email,
         },
-    });
-    if (user) {
-        return user;
-    }
-    const newUser = await prisma_1.prisma.user.create({
-        data: {
+        update: {},
+        create: {
             email: payload.email,
             name: payload.name,
         },
     });
-    return newUser;
+    return user;
 };
 exports.findOrCreateUser = findOrCreateUser;
 const createSession = async (userId) => {

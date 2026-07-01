@@ -4,6 +4,7 @@ const auth_service_1 = require("./auth.service");
 const authMiddleware = (req, res, next) => {
     try {
         const token = req.cookies.access_token;
+        // console.log(token)
         if (!token) {
             return res.status(401).json({
                 success: false,

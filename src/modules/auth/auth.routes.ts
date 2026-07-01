@@ -79,6 +79,7 @@ router.post("/logout", logoutController);
  *         description: Current user retrieved successfully
  *       401:
  *         description: Unauthorized
+ * 
  */
 router.get("/me", authMiddleware, meController);
 

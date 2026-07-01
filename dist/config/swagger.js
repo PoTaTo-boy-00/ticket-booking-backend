@@ -18,6 +18,15 @@ const options = {
                 url: "http://localhost:5000/api",
             },
         ],
+        components: {
+            securitySchemes: {
+                cookieAuth: {
+                    type: "apiKey",
+                    in: "cookie",
+                    name: "access_token",
+                },
+            },
+        },
     },
     apis: [
         "./src/modules/**/*.ts",
